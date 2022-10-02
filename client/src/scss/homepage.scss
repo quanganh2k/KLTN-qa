@@ -1,0 +1,108 @@
+@use "./font.scss";
+
+.nav-menu {
+  font-family: "SVN-Gotham";
+  .nav-menu__title {
+    font-weight: 600;
+    font-size: 24px;
+    color: #1c1c1c;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    line-height: 31px;
+  }
+
+  .nav-menu__title__name {
+    font-size: 18px;
+    margin: 0 0 10px;
+    color: #665e55;
+    font-weight: 550;
+  }
+  .nav-menu__list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .nav-menu__list__items {
+    margin-bottom: 10px;
+    a {
+      text-decoration: none;
+      color: #1c1c1c;
+      font-size: 18px;
+      font-weight: 500;
+      &:hover {
+        color: #baa087;
+      }
+    }
+  }
+}
+
+.products {
+  .products__with-search {
+    width: 50%;
+    margin: 0 0 20px;
+    input {
+      width: 80%;
+      outline: none;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 2px solid #1c1c1c;
+      font-size: 14px;
+    }
+    .products__with-search__icon {
+      margin-left: 14px;
+      background-color: #1c1c1c;
+      color: white;
+      padding: 10px 24px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+  }
+
+  .products__list {
+    .wrapper {
+      border: 1px solid #dbd9d9;
+
+      margin: 0 0 20px;
+      position: relative;
+      top: 0;
+      transition: top ease 0.1s;
+      &:hover {
+        top: -3px;
+        box-shadow: 1px 1px 2px #d7d7d7;
+      }
+      .products__list__img {
+        width: 100%;
+        img {
+          width: 100%;
+        }
+      }
+      .products__list__link {
+        text-decoration: none;
+        text-align: center;
+        color: #242424;
+        .products__list__link__name {
+          margin-bottom: 10px;
+          font-size: 16px;
+        }
+      }
+      .products__list__price {
+        display: block;
+        text-align: center;
+        margin-bottom: 10px;
+        color: #242424;
+        font-size: 14px;
+        font-weight: 550;
+      }
+      .products__list__add-cart {
+        text-align: center;
+        margin: 0 0 20px;
+
+        button {
+          font-size: 12px;
+          text-transform: uppercase;
+          padding: 8px 12px;
+        }
+      }
+    }
+  }
+}

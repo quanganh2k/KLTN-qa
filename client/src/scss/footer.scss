@@ -1,0 +1,129 @@
+@use "./font.scss";
+
+.footer-wrapper {
+  background-color: #f9f9f9;
+  margin-top: 50px;
+  .footer {
+    padding: 40px 0;
+    .footer__address {
+      .footer__address__img {
+        img {
+          width: 60%;
+          text-align: center;
+        }
+        margin-bottom: 20px;
+      }
+      .footer__address__list {
+        list-style: none;
+
+        .footer__address__list__items {
+          font-family: SVN-Gotham;
+          font-size: 16px;
+          font-weight: 550;
+          color: #1c1c1c;
+          margin-bottom: 8px;
+          letter-spacing: 1px;
+        }
+      }
+    }
+    .footer__instruction {
+      font-family: SVN-Gotham;
+
+      .footer__instruction__heading {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1c1c1c;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        letter-spacing: 1px;
+      }
+      .footer__instruction__list {
+        list-style: none;
+        padding: 0;
+        .footer__instruction__list__items {
+          margin-bottom: 8px;
+          a {
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1c1c1c;
+            letter-spacing: 1px;
+            &:hover {
+                color: #baa087;
+            }
+          }
+        }
+      }
+    }
+    .footer__policy {
+      font-family: SVN-Gotham;
+
+      .footer__policy__heading {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1c1c1c;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        letter-spacing: 1px;
+      }
+      .footer__policy__list {
+        list-style: none;
+        padding: 0;
+        .footer__policy__list__items {
+          margin-bottom: 8px;
+          a {
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1c1c1c;
+            letter-spacing: 1px;
+            &:hover {
+                color: #baa087;
+            }
+          }
+        }
+      }
+    }
+    .footer__information {
+      font-family: SVN-Gotham;
+      .footer__information__heading {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1c1c1c;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        letter-spacing: 1px;
+      }
+      .footer__information__list {
+        list-style: none;
+        padding: 0;
+        .footer__information__list__items {
+          margin-bottom: 8px;
+          color: #1c1c1c;
+          position: relative;
+          i {
+            font-size: 18px;
+            margin-right: 14px;
+          }
+          span {
+            letter-spacing: 1px;
+            font-size: 16px;
+            font-weight: 550;
+            position: absolute;
+            top: -2px;
+          }
+        }
+      }
+    }
+  }
+  .footer-copyright {
+    padding: 6px 0;
+    border-top: 1px solid #e5e5e5;
+    font-family: SVN-Gotham;
+    font-size: 18px;
+    font-weight: 550;
+    text-align: center;
+  }
+}
