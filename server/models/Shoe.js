@@ -1,6 +1,20 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const ShoeSizeSchema = new Schema(
+  {
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    size: {
+      type: Schema.Types.ObjectId,
+      ref: "sizes",
+    },
+  },
+  { timestamps: true }
+);
+
 const ShoeSchema = new Schema(
   {
     name: {
@@ -31,10 +45,6 @@ const ShoeSchema = new Schema(
       type: Number,
       default: 0,
     },
-    inStock: {
-      type: Number,
-    },
-
     checked: {
       type: Boolean,
       default: false,
@@ -43,10 +53,7 @@ const ShoeSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "categories",
     },
-    size: {
-      type: Schema.Types.ObjectId,
-      ref: "sizes",
-    },
+    sizes: [ShoeSizeSchema],
   },
   { timestamps: true }
 );

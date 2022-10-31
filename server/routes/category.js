@@ -41,11 +41,11 @@ router.post("/", auth, authAdmin, async (req, res) => {
 // @route GET api/category
 // @desc Get ALl Categories
 // @access public
-router.get("/", paginatedResults(Category), async (req, res) => {
+router.get("/",  async (req, res) => {
   try {
-    // const categories = await Category.find();
-    // res.json({ success: true, categories });
-    res.json(res.paginatedResults)
+    const categories = await Category.find();
+    res.json({ success: true, categories });
+    // res.json(res.paginatedResults)
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error.message });

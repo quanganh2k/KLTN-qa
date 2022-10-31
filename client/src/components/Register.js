@@ -4,6 +4,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 import Header from "./Header";
+import Footer from "./Footer";
 
 const Register = () => {
   // Context
@@ -58,6 +59,7 @@ const Register = () => {
           <div className="mb-3 ">
             <label className="form-label text-uppercase">Họ</label>
             <input
+              type="text"
               className="form-control"
               placeholder="Nhập họ"
               name="lastName"
@@ -68,6 +70,7 @@ const Register = () => {
           <div className="mb-3 ">
             <label className="form-label text-uppercase">Tên:</label>
             <input
+              type="text"
               className="form-control"
               placeholder="Nhập tên"
               name="firstName"
@@ -112,6 +115,7 @@ const Register = () => {
           </div>
         </form>
       </div>
+      <Footer />
     </>
   );
 };

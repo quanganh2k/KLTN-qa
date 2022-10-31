@@ -13,6 +13,12 @@ export const shoeReducer = (state, action) => {
         shoes: payload,
       };
 
+    case "ADD_SHOE":
+      return {
+        ...state,
+        shoes: [...state.shoes, payload],
+      };
+
     default:
       return state;
   }

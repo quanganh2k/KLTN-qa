@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { ShoeContext } from "../contexts/ShoeContext";
+import React, { useEffect,  useState } from "react";
+import { Link,  useSearchParams, createSearchParams } from "react-router-dom";
+
 import { pathImg } from "../contexts/constants";
 import AppPagination from "./AppPagination";
 import axios from "axios";
@@ -8,53 +8,53 @@ import { apiUrl } from "../contexts/constants";
 import CurrencyFormat from "react-currency-format";
 
 const Products = () => {
+  //! State
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams?.get('page') || 1;
+  const search = searchParams?.get('search') || '';
+
   const [shoes, setShoes] = useState({});
-
   const [count, setCount] = useState(1);
+  const [query, setQuery] = useState(search);
 
-  const [query, setQuery] = useState("");
-
-  const getAllProducts = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/shoe?page=1&limit=9`);
-      setShoes(response.data.shoes);
-      setCount(response.data.shoes.pageCount);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getProduct = async (currentPage) => {
-    try {
-      const response = await axios.get(
-        `${apiUrl}/shoe?page=${currentPage}&limit=9`
-      );
-      setShoes(response.data.shoes);
-      setCount(response.data.shoes.pageCount);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const onPageChange = async ({ selected }) => {
-    console.log(selected); // vi selected bat dau tu 0
-    let currentPage = selected + 1;
-    await getProduct(currentPage);
-  };
-
-  const search = async () => {
-    const response = await axios.get(`${apiUrl}/shoe/search?name=${query}`);
-    setShoes(response.data);
-  };
-
-  // useEffect(() => {
-  //   search();
-  // }, [query]);
-
+  //! Function
   useEffect(() => {
-    getAllProducts();
-  }, []);
+    (async () => {
+      const filters = {
+        page,
+        search
+      };
+  
+      try {
+        let request = null;
+     
+        if (filters.search) {
+          request = axios.get(`${apiUrl}/shoe/search?name=${filters.search}&page=${filters.page}&limit=9`);
+        } else {
+          request = axios.get(
+            `${apiUrl}/shoe?page=${filters?.page}&limit=9`
+          );
+        }
+        
+        const response = await request;
+        setShoes(response.data.shoes);
+        setCount(response.data.shoes.pageCount);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [page, search]);
 
+  const onPageChange = ({ selected }) => {
+    let currentPage = selected + 1;
+    setSearchParams(createSearchParams({ page: currentPage, search }));
+  };
+
+  const onSubmitSearch = () => {
+    setSearchParams(createSearchParams({ search: query, page: 1 }))
+  };
+
+  //! Render
   return (
     <>
       <div className="container mt-4">
@@ -95,11 +95,12 @@ const Products = () => {
                   type="search"
                   name="input-search"
                   placeholder="Nhập sản phẩm bạn muốn tìm kiếm"
+                  value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
                 <i
                   className="fa-solid fa-magnifying-glass products__with-search__icon"
-                  onClick={search}
+                  onClick={onSubmitSearch}
                 ></i>
               </div>
               <div className="products__list">
@@ -116,7 +117,10 @@ const Products = () => {
                               />
                             </Link>
                           </div>
-                          <Link to={`/product/${shoe._id}`} className="products__list__link">
+                          <Link
+                            to={`/product/${shoe._id}`}
+                            className="products__list__link"
+                          >
                             <h3 className="products__list__link__name">
                               {shoe.name}
                             </h3>
@@ -130,9 +134,9 @@ const Products = () => {
                             suffix={"đ"}
                           />
                           <div className="products__list__add-cart">
-                            <button className="btn btn-dark" type="button">
-                              Thêm vào giỏ hàng
-                            </button>
+                            <Link to={`/product/${shoe._id}`}>
+                              Xem chi tiết
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -140,7 +144,11 @@ const Products = () => {
                 </div>
               </div>
               <div className="row">
-                <AppPagination pageCount={count} onPageChange={onPageChange} />
+                <AppPagination
+                  pageCount={count}
+                  forcePage={page - 1}
+                  onPageChange={onPageChange}
+                />
               </div>
             </div>
           </div>

@@ -6,16 +6,17 @@ import Footer from "./components/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContextProvider from "./contexts/AuthContext";
+import "@stripe/stripe-js";
+
 
 function App() {
   return (
     <Router>
       <Page />
-      <Footer />
       <ToastContainer
         theme="colored"
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

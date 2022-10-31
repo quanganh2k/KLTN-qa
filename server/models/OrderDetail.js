@@ -3,7 +3,17 @@ const Schema = mongoose.Schema;
 
 const OrderDetailSchema = new Schema(
   {
+   
+
+    sizeChoice: {
+      type: Number,
+      required: true,
+    },
     quantity: {
+      type: Number,
+      required: true,
+    },
+    price: {
       type: Number,
       required: true,
     },

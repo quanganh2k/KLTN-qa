@@ -1,0 +1,23 @@
+@import './font.scss';
+
+.success-checkout {
+    font-family: "SVN-Gotham";
+    font-size: 30px;
+    text-align: center;
+    padding-top: 50px;
+    font-weight: 600;
+}
+
+.success-checkout__description {
+    font-family: "SVN-Gotham";
+    text-align: center;
+    font-size: 28px;
+}
+.success-checkout__back {
+    font-family: "SVN-Gotham";
+    font-size: 28px;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    
+}

@@ -3,26 +3,50 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema(
   {
+    fullname: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     date: {
       type: Date,
       default: Date.now(),
     },
-
-    deliveryDate: {
-      type: Date,
-      default: Date.now(),
+    address: {
+      type: String,
+      required: true,
     },
-    status: {
+    province: {
+      type: String,
+      required: true,
+    },
+    district: {
+      type: String,
+      required: true,
+    },
+    ward: {
+      type: String,
+      required: true,
+    },
+
+    statusOrder: {
       type: String,
       enum: ["Đang giao hàng", "Đã giao hàng"],
+      default: "Đang giao hàng",
+    },
+    payment: {
+      type: String,
+      required: true,
+      enum: ["cod", "online"],
     },
     paymentStatus: {
       type: String,
       enum: ["Đã thanh toán", "Chưa thanh toán"],
+      default: "Chưa thanh toán",
     },
-    customer: {
+    user: {
       type: Schema.Types.ObjectId,
-      ref: "customers",
+      ref: "users",
     },
   },
   { timestamps: true }

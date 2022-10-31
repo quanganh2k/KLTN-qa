@@ -67,13 +67,13 @@ const Footer = () => {
                   <ul className="footer__information__list">
                     <li className="footer__information__list__items">
                       
-                        <i class="fa-solid fa-phone"></i>
+                        <i className="fa-solid fa-phone"></i>
                         <span>0988386888</span>
                       
                     </li>
                     <li className="footer__information__list__items">
                       
-                        <i class="fa-solid fa-envelope"></i>
+                        <i className="fa-solid fa-envelope"></i>
                         <span>beclassy@gmail.com</span>
                      
                     </li>

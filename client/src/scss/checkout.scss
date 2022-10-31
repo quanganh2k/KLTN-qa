@@ -1,0 +1,173 @@
+@use "./font.scss";
+
+.container-fluid {
+  padding: 0 !important;
+  .checkout {
+    .checkout-left {
+      padding-left: 80px;
+      .checkout__logoshop {
+        padding: 30px 0;
+        img {
+          width: 30%;
+        }
+      }
+      .checkout__form {
+        .checkout__form__info__form {
+          .input__checkout {
+            &:focus {
+              box-shadow: 0 0 0 1px #000000;
+              border-color: #000000;
+            }
+            padding: 8px 14px;
+            font-size: 18px;
+            color: #333;
+          }
+          select {
+            &:focus {
+              box-shadow: 0 0 0 1px #000000;
+              border-color: #000000;
+            }
+            padding: 8px 14px;
+            font-size: 18px;
+            color: #333;
+          }
+        }
+        margin-top: 10px;
+        font-family: "SVN-Gotham";
+        .checkout__form__info {
+          .checkout__form__info__heading {
+            font-size: 28px;
+            font-weight: 550;
+            color: #333;
+            margin-bottom: 20px;
+          }
+         
+        }
+        .checkout__form__pay {
+          font-size: 28px;
+          font-weight: 550;
+          color: #333;
+          margin-bottom: 20px;
+        }
+        .checkout__form__check {
+          display: flex;
+          align-items: center;
+          input {
+            &:focus {
+              box-shadow: none;
+              background-color: #000000;
+            }
+            cursor: pointer;
+            border-color: #000000;
+            background-color: #fff;
+          }
+          label {
+            margin-left: 10px;
+            font-size: 20px;
+            color: #333;
+          }
+        }
+      }
+    }
+
+    .checkout__order {
+      background-color: #fafafa;
+      padding: 30px 20px 30px 20px;
+      font-family: "SVN-Gotham";
+      height: 100%;
+      .checkout__order__heading {
+        font-size: 28px;
+        font-weight: 550;
+        color: #333;
+        margin-bottom: 30px;
+      }
+      .checkout__order__lists {
+        .checkout__order__lists__flex {
+          display: flex;
+          margin-bottom: 24px;
+          .checkout__order__lists__wrapper-img {
+            width: 20%;
+            position: relative;
+            img {
+              width: 100%;
+              border-radius: 8px;
+              border: 1px solid #d0d0d0;
+            }
+            span {
+              position: absolute;
+              top: -11px;
+              right: -10px;
+              min-width: 24px;
+              height: 24px;
+              text-align: center;
+              background-color: #000000;
+              color: #fff;
+              border-radius: 50%;
+              font-size: 14px;
+              line-height: 24px;
+            }
+          }
+          .checkout__order__lists__details {
+            margin-left: 16px;
+            width: 100%;
+            .checkout__order__lists__details__name {
+              font-size: 18px;
+              font-weight: 550;
+              color: #333;
+              margin-bottom: 8px;
+            }
+            .checkout__order__lists__details__info {
+              display: flex;
+              justify-content: space-between;
+              .checkout__order__lists__details__info__size {
+                color: #727578;
+                font-size: 18px;
+              }
+              .checkout__order__lists__details__info__price {
+                color: #727578;
+                font-size: 18px;
+              }
+            }
+          }
+        }
+        .checkout__order__lists__total {
+          border-top: 1px solid #e1e1e1;
+          margin: 40px 0;
+          padding: 10px 0;
+          display: flex;
+          justify-content: space-between;
+
+          .checkout__order__lists__total__title {
+            font-size: 26px;
+            color: #727578;
+          }
+          .checkout__order__lists__details__info__price {
+            font-size: 28px;
+            font-weight: 550;
+            color: #333;
+          }
+        }
+        .checkout__order__lists__btn {
+          display: flex;
+          align-items: center;
+          a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            margin-right: 30px;
+            i {
+              font-size: 16px;
+
+              color: #333;
+              margin-right: 6px;
+            }
+          }
+          button {
+            padding: 8px 24px;
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+}

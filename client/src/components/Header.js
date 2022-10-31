@@ -3,6 +3,11 @@ import logo from "../assets/images/logo.webp";
 import { Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { CartContext } from "../contexts/CartContext";
+import { pathImg } from "../contexts/constants";
+import CurrencyFormat from "react-currency-format";
+import Button from "react-bootstrap/Button";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const {
@@ -10,12 +15,34 @@ const Header = () => {
     logoutUser,
   } = useContext(AuthContext);
 
+  const {
+    cartState: { cart },
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+  } = useContext(CartContext);
+
+  const [total, setTotal] = useState();
+
+  useEffect(() => {
+    setTotal(
+      cart.reduce((prev, curr) => prev + Number(curr.price * curr.quantity), 0)
+    );
+  }, [cart]);
+
+  console.log("__cart", cart.length);
+
   const [options, setOptions] = useState({
     opt1: "Đăng nhập",
     opt2: "Đăng ký",
   });
 
   const logout = () => logoutUser();
+
+  const handleRemove = (id, sizeChoice) => {
+    removeFromCart(id, sizeChoice);
+    toast.success("Xoá thành công sản phẩm khỏi giỏ hàng");
+  };
 
   useEffect(() => {
     if (isAuthenticated === true) {
@@ -81,11 +108,100 @@ const Header = () => {
                   </div>
                 </div>
                 <div className="header__auth__cart">
-                  <Link to="#">
+                  <Link to="/cart">
                     Giỏ hàng
                     <i className="fa-solid fa-cart-arrow-down"></i>
-                    <span className="cart-quantity">0</span>
+                    <span className="cart-quantity">{cart.length}</span>
                   </Link>
+                  <div className="cart__header__wrapper">
+                    {cart.length !== 0 ? (
+                      <>
+                        {cart.map((e) => {
+                          return (
+                            <React.Fragment key={e._id}>
+                              <div className="car-div">
+                                <div className="cart__header__wrapper__img">
+                                  <img
+                                    src={`${pathImg}/${e.image}`}
+                                    alt="Ảnh sản phẩm"
+                                  />
+                                </div>
+                                <div className="cart__header__wrapper__info">
+                                  <div className="cart__header__wrapper__info__name">
+                                    {e.name}
+                                    <i
+                                      className="fa-solid fa-trash icon-delete"
+                                      onClick={() =>
+                                        handleRemove(e._id, e.sizeChoice)
+                                      }
+                                    ></i>
+                                  </div>
+                                  <div className="cart__header__wrapper__info__size">
+                                    Size: <span>{e.sizeChoice}</span>
+                                  </div>
+                                  <CurrencyFormat
+                                    className="cart__header__wrapper__info__price"
+                                    value={e.price}
+                                    displayType={"text"}
+                                    thousandSeparator={"."}
+                                    decimalSeparator={","}
+                                    suffix={"đ"}
+                                  />
+                                  <div className="cart__header__wrapper__info__quantity">
+                                    <span
+                                      className="cart__header__wrapper__info__quantity__dec"
+                                      onClick={() =>
+                                        decreaseQuantity(e._id, e.sizeChoice)
+                                      }
+                                    >
+                                      -
+                                    </span>
+                                    <span className="cart__header__wrapper__info__quantity__text">
+                                      {e.quantity}
+                                    </span>
+                                    <span
+                                      className="cart__header__wrapper__info__quantity__inc"
+                                      onClick={() =>
+                                        increaseQuantity(e._id, e.sizeChoice)
+                                      }
+                                    >
+                                      +
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </React.Fragment>
+                          );
+                        })}
+                        <div className="cart__header__wrapper__total">
+                          Tổng cộng:{" "}
+                          <CurrencyFormat
+                            className="cart__header__wrapper__total__all"
+                            value={total}
+                            displayType={"text"}
+                            thousandSeparator={"."}
+                            decimalSeparator={","}
+                            suffix={"đ"}
+                          />
+                        </div>
+                        <div className="cart__header__wrapper__buttons">
+                          <Link to="/checkout" className="cart__header__wrapper__btn">
+                            Thanh toán
+                          </Link>
+                          <Link
+                            to="/cart"
+                            className="cart__header__wrapper__btn"
+                          >
+                            Giỏ hàng
+                          </Link>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="cart-empty">
+                        Giỏ hàng chưa có sản phẩm
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

@@ -4,6 +4,7 @@ import slider1 from "../assets/images/slider_1.webp";
 import slider2 from "../assets/images/slider_2.webp";
 import slider3 from "../assets/images/slider4.jpg";
 import Products from "./Products";
+import Footer from "./Footer";
 
 const HomePage = () => {
   return (
@@ -65,6 +66,7 @@ const HomePage = () => {
         </button>
       </div>
       <Products />
+      <Footer />
     </>
   );
 };

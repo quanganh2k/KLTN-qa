@@ -11,6 +11,14 @@ const ShoeContextProvider = ({ children }) => {
     shoes: [],
   });
 
+  const [showAddShoeModal, setShowAddShoeModal] = useState(false);
+  const [showUpdateShoeModal, setShowUpdateShoeModal] = useState(false);
+  const [showToast, setShowToast] = useState({
+    show: false,
+    message: "",
+    type: null,
+  });
+
   // Get all products
   const getAllShoes = async () => {
     try {
@@ -23,6 +31,21 @@ const ShoeContextProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // add shoe
+  const addShoe = async (newShoe) => {
+    try {
+      const response = await axios.post(`${apiUrl}/shoe`, newShoe);
+      if (response.data.success) {
+        dispatch({ type: "ADD_SHOE", payload: response.data.shoe });
+        return response.data
+      }
+    } catch (error) {
+      return error.response.data
+        ? error.response.data
+        : { success: false, message: "Lỗi server" };
     }
   };
 
@@ -39,7 +62,16 @@ const ShoeContextProvider = ({ children }) => {
     } catch (error) {}
   };
 
-  const shoeContextData = { shoeState, getAllShoes, getProductDetails };
+  const shoeContextData = {
+    shoeState,
+    getAllShoes,
+    getProductDetails,
+    showAddShoeModal,
+    setShowAddShoeModal,
+    addShoe,
+    showToast,
+    setShowToast,
+  };
 
   return (
     <ShoeContext.Provider value={shoeContextData}>

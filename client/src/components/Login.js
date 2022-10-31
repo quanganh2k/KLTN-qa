@@ -4,6 +4,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 import Header from "./Header";
+import Footer from "./Footer";
 
 const Login = () => {
   // Context
@@ -91,6 +92,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      <Footer />
     </>
   );
 };

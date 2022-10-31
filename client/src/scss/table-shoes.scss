@@ -1,0 +1,43 @@
+th, td {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    color: #1c1c1c;
+    
+}
+th {
+    text-align: center !important;
+    input {
+        cursor: pointer;
+    }
+}
+td {
+    input {
+        cursor: pointer;
+    }
+    vertical-align: middle; // can giua theo chieu doc
+    img {
+       width: 80%;
+       
+      
+    }
+
+    .td-quantity {
+        width: 40px;
+        display: inline-block;
+    }
+    text-align: center;
+    .edit-icon {
+        margin-right: 10px;
+        font-size: 18px;
+        padding: 4px 4px;
+        color: #6439ff;
+        cursor: pointer;
+    }
+    .delete-icon {
+        font-size: 18px;
+        padding: 4px 4px;
+        color: red;
+        cursor: pointer;
+
+    }
+}

@@ -6,6 +6,8 @@ import setAuthToken from "../utils/setAuthToken";
 
 export const AuthContext = createContext();
 
+
+
 const AuthContextProvider = ({ children }) => {
   const localState = JSON.parse(localStorage.getItem("authState"));
 

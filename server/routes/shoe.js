@@ -54,17 +54,16 @@ router.post("/", auth, authAdmin, upload.single("image"), async (req, res) => {
     } else {
       console.log(req.file);
       const image = req.file.path.replace(/\\/g, "/");
-      const { name, price, description, color, inStock, category, size } =
-        req.body;
+      const { name, price, description, color, category, sizes } = req.body;
 
       if (
         !name ||
         !price ||
         !description ||
         !color ||
-        !inStock ||
         !category ||
-        !size
+        !sizes ||
+        sizes.length == 0 // sizes la mot array gom nhieu object [{size, quantity}]
       ) {
         return res
           .status(400)
@@ -76,21 +75,29 @@ router.post("/", auth, authAdmin, upload.single("image"), async (req, res) => {
           .status(400)
           .json({ success: false, message: "Tên sản phẩm này đã tồn tại" });
       }
+
+      for (const size of sizes) {
+        if (!size.size || !size.quantity) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Bạn cần điền đầy đủ thông tin" });
+        }
+      }
+
       const newShoe = new Shoe({
         name,
         image,
         price,
         description,
         color,
-        inStock,
         category,
-        size,
+        sizes,
       });
 
       await newShoe.save();
       res.json({
         success: true,
-        message: "Thêm mới thành công một sản phẩm",
+        message: "Thêm mới thành công sản phẩm",
         shoe: newShoe,
       });
     }
@@ -104,8 +111,7 @@ router.post("/", auth, authAdmin, upload.single("image"), async (req, res) => {
 // @access public
 router.get("/", paginatedResults(Shoe), async (req, res) => {
   try {
-    let shoes = await Shoe.find();
-    shoes = res.paginatedResults;
+    const shoes = res.paginatedResults;
     res.json({ success: true, shoes });
   } catch (error) {
     console.log(error);
@@ -116,13 +122,11 @@ router.get("/", paginatedResults(Shoe), async (req, res) => {
 // @route GET api/shoe/search
 // @desc Search by name
 // @access public
-router.get("/search", async (req, res) => {
+router.get("/search", paginatedResults(Shoe), async (req, res) => {
   try {
-    const filterShoe = await Shoe.find({
-      name: { $regex: req.query.name, $options: "$i" },
-    });
+    const filterShoe = res.paginatedResults;
 
-    res.json({ success: true, results: filterShoe });
+    res.json({ success: true, shoes: filterShoe });
   } catch (error) {
     console.log(error);
   }
@@ -134,7 +138,7 @@ router.get("/search", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const id = req.params.id;
   try {
-    const shoe = await Shoe.findById(id);
+    const shoe = await Shoe.findById(id).populate(["category", "sizes.size"]);
 
     res.json({ success: true, shoe });
   } catch (error) {
@@ -175,22 +179,31 @@ router.put(
           .json({ success: false, message: "Bạn cần upload ảnh lên" });
       } else {
         const image = req.file.path;
-        const { name, price, description, color, inStock, category, size } =
-          req.body;
+        const { name, price, description, color, category, sizes } = req.body;
 
         if (
           !name ||
           !price ||
           !description ||
           !color ||
-          !inStock ||
           !category ||
-          !size
+          !sizes ||
+          sizes.length == 0
         ) {
           return res
             .status(400)
             .json({ success: false, message: "Bạn cần điền đầy đủ thông tin" });
         }
+
+        for (const size of sizes) {
+          if (!size.size || !size.quantity) {
+            return res.status(400).json({
+              success: false,
+              message: "Bạn cần điền đầy đủ thông tin",
+            });
+          }
+        }
+
         const updatedShoe = await Shoe.findOneAndUpdate(
           { _id: req.params.id },
           {
@@ -199,9 +212,8 @@ router.put(
             price,
             description,
             color,
-            inStock,
             category,
-            size,
+            sizes,
           },
           { new: true }
         );
