@@ -3,8 +3,10 @@ const router = express.Router();
 
 const auth = require("../middleware/auth");
 const authAdmin = require("../middleware/authAdmin");
+const paginatedResults = require("../pagination/paginatedResults");
 
 const Size = require("../models/Size.js");
+const Shoe = require("../models/Shoe.js");
 
 // @route POST api api/size
 // @desc Create size
@@ -42,9 +44,8 @@ router.post("/", auth, authAdmin, async (req, res) => {
 // @route GET api/size
 // @desc Get All Sizes
 // @access Public
-router.get("/", async (req, res) => {
-  const sizes = await Size.find();
-
+router.get("/", paginatedResults(Size), async (req, res) => {
+  const sizes = res.paginatedResults;
   res.json({ success: true, sizes });
 });
 
@@ -53,14 +54,38 @@ router.get("/", async (req, res) => {
 // @access Only admin
 router.delete("/:id", auth, authAdmin, async (req, res) => {
   try {
+    const shoeSize = await Shoe.find({ "sizes.size": req.params.id });
+    for (let i = 0; i < shoeSize.length; i++) {
+      const shoe = shoeSize[i];
+      await Shoe.findByIdAndUpdate(shoe._id, {
+        $set: {
+          sizes: shoe.sizes.filter(
+            (item) => item.size.toString() !== req.params.id
+          ),
+        },
+      });
+    }
+
     const deletedSize = await Size.findByIdAndDelete(req.params.id);
 
     res.json({
       success: true,
-      message: "Bạn đã xoá thành công size của sản phẩm",
+      message: "Bạn đã xoá thành công size này",
       size: deletedSize,
     });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.get("/search", paginatedResults(Size), async (req, res) => {
+  try {
+    const filterSize = res.paginatedResults;
+
+    res.json({ success: true, sizes: filterSize });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // @route PUT api/size/:id
@@ -75,7 +100,7 @@ router.put("/:id", auth, authAdmin, async (req, res) => {
   }
   try {
     const updatedSize = await Size.findOneAndUpdate(
-      { id: req.params.id },
+      { _id: req.params.id },
       { sizeNumber },
       { new: true }
     );

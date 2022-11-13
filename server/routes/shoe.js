@@ -10,7 +10,7 @@ const Category = require("../models/Category");
 const Size = require("../models/Size");
 
 const paginatedResults = require("../pagination/paginatedResults");
-const { route } = require("./size");
+// const { route } = require("./size");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -63,7 +63,7 @@ router.post("/", auth, authAdmin, upload.single("image"), async (req, res) => {
         !color ||
         !category ||
         !sizes ||
-        sizes.length == 0 // sizes la mot array gom nhieu object [{size, quantity}]
+        sizes.length == 0 // sizes la mot array gom nhieu object [{size, quantity, inStock}]
       ) {
         return res
           .status(400)
@@ -77,7 +77,7 @@ router.post("/", auth, authAdmin, upload.single("image"), async (req, res) => {
       }
 
       for (const size of sizes) {
-        if (!size.size || !size.quantity) {
+        if (!size.size || !size.quantity || !size.inStock) {
           return res
             .status(400)
             .json({ success: false, message: "Bạn cần điền đầy đủ thông tin" });
@@ -109,28 +109,55 @@ router.post("/", auth, authAdmin, upload.single("image"), async (req, res) => {
 // @route GET api/shoe
 // @desc Get ALl Shoes
 // @access public
-router.get("/", paginatedResults(Shoe), async (req, res) => {
-  try {
-    const shoes = res.paginatedResults;
-    res.json({ success: true, shoes });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, message: error.message });
+router.get(
+  "/",
+  paginatedResults(Shoe, ["category", "sizes.size"]),
+  async (req, res) => {
+    try {
+      const shoes = res.paginatedResults;
+      res.json({ success: true, shoes });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
   }
-});
+);
+
+router.get(
+  "/category",
+  (req, res, next) =>
+    paginatedResults(Shoe, [], { category: req.query.categoryId })(
+      req,
+      res,
+      next
+    ),
+  async (req, res) => {
+    try {
+      const shoes = res.paginatedResults;
+      res.json({ success: true, shoes });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
 
 // @route GET api/shoe/search
 // @desc Search by name
 // @access public
-router.get("/search", paginatedResults(Shoe), async (req, res) => {
-  try {
-    const filterShoe = res.paginatedResults;
+router.get(
+  "/search",
+  paginatedResults(Shoe, ["category", "sizes.size"]),
+  async (req, res) => {
+    try {
+      const filterShoe = res.paginatedResults;
 
-    res.json({ success: true, shoes: filterShoe });
-  } catch (error) {
-    console.log(error);
+      res.json({ success: true, shoes: filterShoe });
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 // @route GET api/shoe/:id
 // @desc Get 1 shoe
@@ -146,17 +173,23 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// @route DELETE api/shoe/:id
+// @route DELETE api/shoe/
 // @desc Delete Shoe
 // @access only admin
-router.delete("/:id", auth, authAdmin, async (req, res) => {
+router.delete("/", auth, authAdmin, async (req, res) => {
   try {
-    const deletedShoe = await Shoe.findByIdAndDelete(req.params.id);
+    const filter = {};
+    if (req.query.listId && req.query.listId.length > 0) {
+      filter._id = {
+        $in: req.query.listId,
+      };
+    }
+    const deletedShoe = await Shoe.deleteMany(filter);
 
     res.json({
       success: true,
       message: "Bạn đã xoá thành công sản phẩm này",
-      category: deletedShoe,
+      shoe: deletedShoe,
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -196,7 +229,7 @@ router.put(
         }
 
         for (const size of sizes) {
-          if (!size.size || !size.quantity) {
+          if (!size.size || !size.quantity || !size.inStock) {
             return res.status(400).json({
               success: false,
               message: "Bạn cần điền đầy đủ thông tin",

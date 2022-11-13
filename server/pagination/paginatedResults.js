@@ -1,31 +1,44 @@
-const paginatedResults = (model) => {
+const paginatedResults = (model, populate, filter) => {
   return async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const name = req.query.name;
-    const lt = req.query.lt; // nho hon
-    const gte = req.query.gte; // lon hon hoac bang
+    const sizeNumber = req.query.sizeNumber;
+    const price = req.query.price;
+    const orderId = req.query.orderId;
+    const detailId = req.query.detailId
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
     const results = {};
 
-
     try {
-      const filter = {};
+      const _filter = {
+        ...(filter || {}),
+      };
       if (name) {
-        filter.name = { $regex: name, $options: "$i" };
+        _filter.name = { $regex: name, $options: "$i" };
       }
-      if(lt) {
-        filter.price =  {$lt: 220000 }
+      if (sizeNumber) {
+        _filter.sizeNumber = { $regex: sizeNumber, $options: "$i" };
       }
-      if(gte) {
-        filter.price =  {$gte: 200000, $lte: 1600000}
+     
+      if (orderId) {
+        _filter._id = orderId ;
+      }
+      if (detailId) {
+        _filter._id = detailId ;
+      }
+      if (price && price === "lt") {
+        _filter.price = { $lt: 2000000 };
+      }
+      if (price && price === "gte") {
+        _filter.price = { $gte: 2000000, $lte: 4000000 };
       }
 
       // array chua tat ca du lieu
-      const all = await model.find(filter).exec();
+      const all = await model.find(_filter).exec();
 
       // tinh tong so data
       let totalData = 0;
@@ -46,14 +59,12 @@ const paginatedResults = (model) => {
           limit: limit,
         };
       }
-
+    
       // tim ra tong so trang
       results.pageCount = Math.ceil(totalData / limit);
-
-
       results.results = await model
-        .find(filter)
-        .populate(["category", "sizes.size"])
+        .find(_filter)
+        .populate(populate)
         .limit(limit)
         .skip(startIndex)
         .exec();

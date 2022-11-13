@@ -4,8 +4,12 @@ th, td {
     color: #1c1c1c;
     
 }
+.td-name {
+    text-transform: uppercase;
+}
 th {
     text-align: center !important;
+    vertical-align: middle;
     input {
         cursor: pointer;
     }
@@ -22,7 +26,8 @@ td {
     }
 
     .td-quantity {
-        width: 40px;
+        min-width: 32px;
+        margin-right: 6px;
         display: inline-block;
     }
     text-align: center;

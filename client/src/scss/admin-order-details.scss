@@ -1,0 +1,76 @@
+.order-details-wrapper {
+    display: flex;
+    font-family: "Nunito", sans-serif;
+    .order-details-container {
+      flex: 6;
+      .order-details-page {
+        margin: 30px 20px;
+        .order-details-page__with-search {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          .order-details-page__with-search__search {
+            width: 26%;
+            input {
+              width: 80%;
+              padding: 6px 10px;
+              outline: none;
+              border-radius: 8px;
+              font-size: 16px;
+              margin-right: 12px;
+              color: #1c1c1c;
+            }
+            .order-details-page__with-search__search__icon {
+              background-color: #6439ff;
+              color: white;
+              padding: 8px 18px;
+              cursor: pointer;
+              font-size: 16px;
+              border-radius: 6px;
+            }
+          }
+         
+          .order-details-pages__with-search__create {
+            .order-details-pages__with-search__create__btn {
+              margin-right: 10px;
+              background-color: #6439ff;
+            }
+            button {
+              font-size: 14px;
+              padding: 6px 12px;
+            }
+          }
+        }
+        .order-details-page__list {
+          .td-name {
+            text-transform: uppercase;
+          }
+            .order__btn-view {
+                color: #fff;
+                text-decoration: none;
+                display: inline-block;
+                width: 70px;
+                padding: 4px 8px;
+                border-radius: 6px;
+                background-color:#6439ff;
+                margin-bottom: 8px;
+            }
+            .order__btn-complete {
+                width: 70px;
+                padding: 4px 8px;
+                border-radius: 6px;
+                margin-bottom: 8px;
+            }
+            .order__btn-cancel {
+                width: 70px;
+                padding: 4px 8px;
+                border-radius: 6px;
+            }
+          .order-details-page__list__pagination {
+            margin: 40px 0;
+          }
+        }
+      }
+    }
+}

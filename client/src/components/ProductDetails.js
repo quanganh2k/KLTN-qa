@@ -12,20 +12,59 @@ import insuaranceLogo from "../assets/images/policy_images_3.svg";
 import exchangeLogo from "../assets/images/policy_images_4.svg";
 import { CartContext } from "../contexts/CartContext";
 import { toast } from "react-toastify";
+import { AuthContext } from "../contexts/AuthContext";
+import { FeedbackContext } from "../contexts/FeedbackContext";
 
 const ProductDetails = () => {
+  const { id } = useParams();
   const {
     shoeState: { shoes },
     getProductDetails,
   } = useContext(ShoeContext);
 
   const {
+    authState: { isAuthenticated, user },
+  } = useContext(AuthContext);
+
+  const {
     addCart,
     cartState: { cart },
   } = useContext(CartContext);
 
+  const {
+    feedbackState: { fb },
+    addFeedback,
+    getFeedbackByProduct,
+  } = useContext(FeedbackContext);
+
+  console.log("__fb", fb);
+
+  useEffect(() => {
+    getFeedbackByProduct(id);
+  }, [id]);
+
   const [quantity, setQuantity] = useState(1);
   const [sizeChoice, setSizeChoice] = useState(38);
+
+  const [feedback, setFeedback] = useState({
+    content: "",
+    user: user?._id,
+    shoe: id,
+  });
+
+  const { content } = feedback;
+
+  const onChangeFeedback = (event) => {
+    setFeedback({ ...feedback, [event.target.name]: event.target.value });
+  };
+
+  const handleCmt = async () => {
+    const {success,message} = await addFeedback(feedback, id);
+    if(success === false) {
+      toast.error(message)
+    }
+    setFeedback({ content: "", user: user?._id, shoe: id });
+  };
 
   const handleAddCart = () => {
     addCart({ ...shoes, sizeChoice, quantity });
@@ -33,8 +72,6 @@ const ProductDetails = () => {
   };
 
   console.log("__sau khi add", cart);
-
-  const { id } = useParams();
 
   // const [active, setActive] = useState(38);
 
@@ -105,49 +142,6 @@ const ProductDetails = () => {
                     </React.Fragment>
                   );
                 })}
-
-                {/* <span
-                  onClick={() => handleClick(39)}
-                  className={
-                    active === 39
-                      ? "active product-details__size__details"
-                      : "product-details__size__details"
-                  }
-                >
-                  39
-                </span>
-
-                <span
-                  onClick={() => handleClick(40)}
-                  className={
-                    active === 40
-                      ? "active product-details__size__details"
-                      : "product-details__size__details"
-                  }
-                >
-                  40
-                </span>
-
-                <span
-                  onClick={() => handleClick(41)}
-                  className={
-                    active === 41
-                      ? "active product-details__size__details"
-                      : "product-details__size__details"
-                  }
-                >
-                  41
-                </span>
-                <span
-                  onClick={() => handleClick(42)}
-                  className={
-                    active === 42
-                      ? "active product-details__size__details"
-                      : "product-details__size__details"
-                  }
-                >
-                  42
-                </span> */}
               </p>
               <p className="product-details__quatity">
                 <span className="product-details__label">Số lượng:</span>
@@ -200,6 +194,41 @@ const ProductDetails = () => {
               </div>
             </div>
           </div>
+          <div className="product-details__wrapper-cmt">
+            <div className="form-floating">
+              <p className="product-details__wrapper-cmt__heading">Nhập bình luận, phản hồi về sản phẩm</p>
+              <textarea
+                className="form-control"
+                placeholder="Nhập bình luận, phản hồi"
+                name="content"
+                value={content}
+                onChange={onChangeFeedback}
+              ></textarea>
+            </div>
+            <div>
+              <button
+                type="button"
+                className="btn btn-primary btn-cmt"
+                onClick={handleCmt}
+              >
+                Đăng
+              </button>
+            </div>
+          </div>
+          {fb.length !== 0 ? (
+            <>
+              {fb?.map((el) => (
+                <div className="product-details__cmt__list" key={el?._id}>
+                  <span className="user-cmt">
+                    {el?.user?.lastName} {el?.user?.firstName}:{" "}
+                  </span>
+                  {el?.content}
+                </div>
+              ))}
+            </>
+          ) : (
+            <div className="product-details__cmt__list">Chưa có bình luận về sản phẩm</div>
+          )}
         </div>
       </div>
       <Footer />

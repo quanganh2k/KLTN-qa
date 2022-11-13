@@ -37,24 +37,43 @@
 }
 
 .products {
-  .products__with-search {
-    width: 50%;
+  .products__filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin: 0 0 20px;
-    input {
-      width: 80%;
-      outline: none;
-      padding: 8px 14px;
-      border-radius: 10px;
-      border: 2px solid #1c1c1c;
-      font-size: 14px;
+
+    .products__filter__with-search {
+      width: 50%;
+      vertical-align: middle;
+      input {
+        width: 64%;
+        outline: none;
+        padding: 8px 14px;
+        border-radius: 10px;
+        border: 2px solid #1c1c1c;
+        font-size: 14px;
+      }
+      .products__filter__with-search__icon {
+        margin-left: 14px;
+        background-color: #1c1c1c;
+        color: white;
+        padding: 10px 24px;
+        cursor: pointer;
+        font-size: 18px;
+      }
     }
-    .products__with-search__icon {
-      margin-left: 14px;
-      background-color: #1c1c1c;
-      color: white;
-      padding: 10px 24px;
-      cursor: pointer;
+    .products__filter__price {
+      font-family: "SVN-Gotham";
       font-size: 18px;
+      .products__filter__price__heading {
+        margin-right: 12px;
+      }
+      .products__filter__price__check {
+        &:last-child {
+          margin-right: 0 !important;
+        }
+      }
     }
   }
 
@@ -83,6 +102,7 @@
         .products__list__link__name {
           margin-bottom: 10px;
           font-size: 16px;
+          text-transform: uppercase;
         }
       }
       .products__list__price {

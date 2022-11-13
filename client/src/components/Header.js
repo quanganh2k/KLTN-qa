@@ -8,6 +8,7 @@ import { pathImg } from "../contexts/constants";
 import CurrencyFormat from "react-currency-format";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
+import { CategoryContext } from "../contexts/CategoryContext";
 
 const Header = () => {
   const {
@@ -21,6 +22,15 @@ const Header = () => {
     increaseQuantity,
     decreaseQuantity,
   } = useContext(CartContext);
+
+  const {
+    categoryState: { categories },
+    getAllCategories,
+  } = useContext(CategoryContext);
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
 
   const [total, setTotal] = useState();
 
@@ -185,7 +195,10 @@ const Header = () => {
                           />
                         </div>
                         <div className="cart__header__wrapper__buttons">
-                          <Link to="/checkout" className="cart__header__wrapper__btn">
+                          <Link
+                            to="/checkout"
+                            className="cart__header__wrapper__btn"
+                          >
                             Thanh toán
                           </Link>
                           <Link
@@ -221,26 +234,18 @@ const Header = () => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Link>
                   <ul className="header-dropdown">
-                    <li className="header-dropdown__item">
-                      <Link className="change-color" to="/">
-                        oxford
-                      </Link>
-                    </li>
-                    <li className="header-dropdown__item">
-                      <Link className="change-color" to="/">
-                        loafer
-                      </Link>
-                    </li>
-                    <li className="header-dropdown__item">
-                      <Link className="change-color" to="/">
-                        derby
-                      </Link>
-                    </li>
-                    <li className="header-dropdown__item">
-                      <Link className="change-color" to="/">
-                        boots
-                      </Link>
-                    </li>
+                    {categories?.results?.map((el) => {
+                      return (
+                        <li className="header-dropdown__item" key={el?._id}>
+                          <Link
+                            className="change-color"
+                            to={`/product/category/${el?._id}`}
+                          >
+                            {el?.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </li>
                 <li className="header__nav__list__item">

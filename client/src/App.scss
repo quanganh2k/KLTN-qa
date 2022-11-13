@@ -1,15 +1,17 @@
-@use './scss/header.scss';
-@use './scss/footer.scss';
-@use './scss/login.scss';
-@use './scss/register.scss';
-@use './scss/homepage.scss';
-@use './scss/productDetails.scss';
-@use './scss/cart.scss';
-@use './scss/checkout.scss';
-@use './scss/checkout-success.scss';
-// @use './scss/sidebar.scss';
-@use './scss/dashboard.scss';
-@use './scss//admin-shoes.scss'
-// @use './scss/navbar.scss'
-// @use './scss/pagination.scss';
+@use "./scss/header.scss";
+@use "./scss/footer.scss";
+@use "./scss/login.scss";
+@use "./scss/register.scss";
+@use "./scss/homepage.scss";
+@use "./scss/productDetails.scss";
+@use "./scss/cart.scss";
+@use "./scss/checkout.scss";
+@use "./scss/checkout-success.scss";
+@use "./scss/dashboard.scss";
+@use "./scss//admin-shoes.scss";
+@use "./scss//admin-categories.scss";
+@use "./scss//admin-sizes.scss";
+@use "./scss//admin-orders.scss";
+@use "./scss//admin-order-details.scss";
+@use "./scss//admin-feedbacks.scss";
 

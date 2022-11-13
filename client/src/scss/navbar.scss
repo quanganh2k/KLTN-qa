@@ -41,6 +41,33 @@
         align-items: center;
         margin-right: 20px;
         position: relative;
+        .icon-account {
+          position: relative;
+          cursor: pointer;
+          &:hover {
+            .admin-account {
+              display: block;
+            }
+          }
+          .admin-account {
+            position: absolute;
+            top: 24px;
+            right: 0;
+            width: 100px;
+            background-color: #6439ff;
+            color: #fff;
+            display: none;
+            border-radius: 10px;
+            z-index: 1;
+            .admin-account__item {
+              padding: 6px 10px;
+              font-size: 16px;
+              font-family: "Nunito", sans-serif;
+            }
+          }
+          
+        }
+        
 
         .icon {
           font-size: 20px;

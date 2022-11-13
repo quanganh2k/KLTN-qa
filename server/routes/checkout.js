@@ -21,7 +21,7 @@ router.post("/", auth, async (req, res) => {
       ward,
       payment,
       products,
-      token,
+      total
     } = req.body;
 
     if (
@@ -54,7 +54,7 @@ router.post("/", auth, async (req, res) => {
       ward,
 
       payment,
-
+      total,
       user: req.user.userId,
     });
 
@@ -79,30 +79,14 @@ router.post("/", auth, async (req, res) => {
 
         
         if (JSON.stringify(findSize._id) === JSON.stringify(size.size)) {
-          size.quantity = size.quantity - product.quantity;
+          size.inStock = size.quantity - product.quantity;
         }
       }
 
       await Shoe.findByIdAndUpdate(shoeFind._id, shoeFind);
     }
 
-    if (payment === "online" && token) {
-      const idempontencyKey = uuid();
-
-      const customer = await stripe.customers.create({
-        email: token.email,
-        source: token.id,
-      });
-
-      const info = await stripe.charges.create(
-        {
-          amount: product.total,
-          currency: "vnd",
-          customer: customer.id,
-        },
-        { idempontencyKey }
-      );
-    }
+    
 
     return res.json({ success: true });
   } catch (error) {

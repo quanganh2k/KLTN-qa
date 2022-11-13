@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { CartContext } from "../contexts/CartContext";
 import { pathImg, apiUrl } from "../contexts/constants";
 import provinceService from "../services/provinceService";
-import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
 const Checkout = () => {
@@ -16,13 +15,22 @@ const Checkout = () => {
     authState: { isAuthenticated, user },
   } = useContext(AuthContext);
 
-  console.log("___user",user)
+  console.log("___user", user);
 
   const {
     cartState: { cart },
   } = useContext(CartContext);
 
+  
+
   const [total, setTotal] = useState();
+
+  useEffect(() => {
+    setTotal(
+      cart.reduce((prev, curr) => prev + Number(curr.price * curr.quantity), 0)
+    );
+  }, [cart]);
+  
   const [checkoutForm, setCheckoutForm] = useState({
     // email: user?.email,
     fullname: "",
@@ -34,10 +42,13 @@ const Checkout = () => {
     wardCode: "",
 
     payment: "",
-    paymentStatus: "Chưa thanh toán",
+    paymentStatus: "Unpaid",
     products: cart,
+   
     user: user?._id,
   });
+
+  console.log("__total",total)
 
   const provinceList = provinceService.getOptionsProvince();
   const districtList = provinceService.getOptionsDistrict(
@@ -45,14 +56,7 @@ const Checkout = () => {
   );
   const wardList = provinceService.getOptionsWard(checkoutForm.districtCode);
 
-  const {
-   
-    fullname,
-    phoneNumber,
-    address,
-    payment,
-  } = checkoutForm;
-  
+  const { fullname, phoneNumber, address, payment } = checkoutForm;
 
   //! Function
   const onChangeProvinceDistrictWard = (key) => (event) => {
@@ -76,11 +80,7 @@ const Checkout = () => {
 
   console.log(cart);
 
-  useEffect(() => {
-    setTotal(
-      cart.reduce((prev, curr) => prev + Number(curr.price * curr.quantity), 0)
-    );
-  }, [cart]);
+  
 
   const navigate = useNavigate();
 
@@ -89,33 +89,6 @@ const Checkout = () => {
       navigate("/login");
     }
   }, [isAuthenticated]);
-
-  //! Stripe
-  let stripePromise;
-
-  const getStripe = () => {
-    if (!stripePromise) {
-      stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
-    }
-
-    return stripePromise;
-  };
-
-  const [stripeError, setStripeError] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const item = {
-    product: cart._id,
-    sizeChoice: cart.sizeChoice,
-    quantity: cart.quantity,
-    price: total,
-  };
-
-  const checkoutOptions = {
-    lineItems: [item],
-    mode: "payment",
-    successUrl: "checkout/success",
-    cancelUrl: "checkout/cancel",
-  };
 
   const onChangeCheckoutForm = (event) => {
     setCheckoutForm({
@@ -127,7 +100,7 @@ const Checkout = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      if (payment === "cod") {
+      if (payment === "Cod") {
         //* Parsed body
         const { provinceCode, districtCode, wardCode, ...rest } = checkoutForm;
 
@@ -138,10 +111,12 @@ const Checkout = () => {
           ...rest,
         };
 
-        const response = await axios.post(`${apiUrl}/checkout`, body);
-        if(response.data.success) {
-          navigate("/checkout/success")
-          localStorage.removeItem("cart")
+        const bodyNew = {...body, total}
+
+        const response = await axios.post(`${apiUrl}/checkout`, bodyNew);
+        if (response.data.success) {
+          navigate("/checkout/success");
+          localStorage.removeItem("cart");
         }
       } else {
         const { provinceCode, districtCode, wardCode, ...rest } = checkoutForm;
@@ -159,20 +134,7 @@ const Checkout = () => {
     } catch (error) {
       console.log(error);
     }
-
-    // neu ma chon online payment
-    if (payment === "online") {
-      const stripe = await getStripe();
-      const { error } = await stripe.redirectToCheckout(checkoutOptions);
-      console.log("Stripe checkout error", error);
-
-      if (error) setStripeError(error.message);
-      setLoading(false);
-    }
-    setLoading(true);
   };
-
-  if (stripeError) alert(stripeError);
 
   //! Render
   return (
@@ -203,7 +165,6 @@ const Checkout = () => {
                               className="form-control input__checkout"
                               placeholder="Email"
                               value={user?.email}
-
                               disabled
                             />
                           </div>
@@ -309,7 +270,7 @@ const Checkout = () => {
                             type="radio"
                             name="payment"
                             id="flexRadioDefault1"
-                            value="cod"
+                            value="Cod"
                             onChange={onChangeCheckoutForm}
                           />
                           <label
@@ -317,22 +278,6 @@ const Checkout = () => {
                             for="flexRadioDefault1"
                           >
                             Thanh toán khi giao hàng (COD)
-                          </label>
-                        </div>
-                        <div class="form-check checkout__form__check">
-                          <input
-                            className="form-check-input"
-                            type="radio"
-                            name="payment"
-                            value="online"
-                            onChange={onChangeCheckoutForm}
-                            id="flexRadioDefault2"
-                          />
-                          <label
-                            className="form-check-label"
-                            for="flexRadioDefault2"
-                          >
-                            Thanh toán qua Stripe
                           </label>
                         </div>
                       </div>
@@ -349,7 +294,10 @@ const Checkout = () => {
                 <div className="checkout__order__lists">
                   {cart.map((e) => {
                     return (
-                      <div className="checkout__order__lists__flex" key={e?._id}>
+                      <div
+                        className="checkout__order__lists__flex"
+                        key={e?._id}
+                      >
                         <div className="checkout__order__lists__wrapper-img">
                           <img
                             src={`${pathImg}/${e?.image}`}

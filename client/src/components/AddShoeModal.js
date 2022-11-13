@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShoeContext } from "../contexts/ShoeContext";
 import { SizeContext } from "../contexts/SizeContext";
 import { CategoryContext } from "../contexts/CategoryContext";
+import "../scss/add-shoe-modal.scss";
 
 const AddShoeModal = () => {
   //! Contexts
@@ -42,19 +43,37 @@ const AddShoeModal = () => {
 
   const [fileImg, setFileImg] = useState("");
 
-  const [sizeState, setSizeState] = useState({
-    size: "",
-    quantity: "",
-  });
+  const [sizeState, setSizeState] = useState([
+    { size: "", quantity: "", inStock: "" },
+  ]);
 
   const { name, price, description, color, category } = newShoe;
-  const { size, quantity } = sizeState;
 
   const onChangeNewShoeForm = (event) =>
     setNewShoe({ ...newShoe, [event.target.name]: event.target.value });
 
-  const onChangeSize = (event) => {
-    setSizeState({ ...sizeState, [event.target.name]: event.target.value });
+  const handleAddSize = () => {
+    setSizeState([...sizeState, { size: "", quantity: "", inStock: "" }]);
+  };
+
+  const handleRemoveSize = (index) => {
+    let list = [...sizeState]
+    
+    list.splice(index, 1);
+    setSizeState(list);
+
+    console.log("newData", list);
+    console.log("__list", sizeState);
+    const tempSize = newShoe.sizes.filter((el,ind) => (ind !== index));
+    setNewShoe({ ...newShoe, sizes: tempSize })
+  };
+ 
+  const onChangeSize = (name, item, index) => (event) => {
+    const list = [...sizeState]
+    list[index][name] = event.target.value;
+    
+    setNewShoe({ ...newShoe, sizes: list });
+    console.log("___test1", newShoe);
   };
 
   const onChangeUploadFile = (event) => {
@@ -69,6 +88,7 @@ const AddShoeModal = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    console.log("hoatlala",newShoe,category);
     const formData = new FormData();
     console.log("__fileImg", fileImg);
     formData.append("name", name);
@@ -77,10 +97,11 @@ const AddShoeModal = () => {
     formData.append("description", description);
     formData.append("color", color);
     formData.append("category", category.toString());
-    const sizes = [{ size: size, quantity: quantity }];
-    sizes.forEach((el, index) => {
-      formData.append(`sizes[${index}][size]`, el.size.toString());
+    console.log("__gửi",newShoe?.sizes)
+    newShoe?.sizes?.forEach((el, index) => {
+      formData.append(`sizes[${index}][size]`, el.size);
       formData.append(`sizes[${index}][quantity]`, el.quantity);
+      formData.append(`sizes[${index}][inStock]`, el.inStock);
     });
 
     const config = {
@@ -104,7 +125,7 @@ const AddShoeModal = () => {
       category: "",
       sizes: [],
     });
-    setSizeState({ size: "", quantity: "" });
+
     setShowAddShoeModal(false);
   };
 
@@ -153,36 +174,67 @@ const AddShoeModal = () => {
               onChange={onChangeNewShoeForm}
             />
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Select
-              type="text"
-              placeholder="Size"
-              name="size"
-              required
-              value={size}
-              onChange={onChangeSize}
-            >
-              {" "}
-              <option>Chọn size</option>
-              {sizes?.map((el) => {
-                return (
-                  <React.Fragment key={el?._id}>
-                    <option value={el?._id}>{el?.sizeNumber}</option>
-                  </React.Fragment>
-                );
-              })}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Số lượng"
-              name="quantity"
-              required
-              value={quantity}
-              onChange={onChangeSize}
-            />
-          </Form.Group>
+
+          {(sizeState || [])?.map((item, index) => {
+            return (
+              <React.Fragment key={index}>
+                <Form.Group className="add-shoe__size">
+                  <Form.Select
+                    type="text"
+                    placeholder="Size"
+                    name="size"
+                    required
+                    value={item?.size}
+                    onChange={onChangeSize("size", item, index)}
+                    className="add-shoe__input"
+                  >
+                    {" "}
+                    <option>Chọn size</option>
+                    {sizes?.results?.map((el) => {
+                      return (
+                        <React.Fragment key={el?._id}>
+                          <option value={el?._id}>{el?.sizeNumber}</option>
+                        </React.Fragment>
+                      );
+                    })}
+                  </Form.Select>
+                  <Form.Control
+                    type="text"
+                    placeholder="Số lượng nhập"
+                    name="quantity"
+                    required
+                    value={item?.quantity}
+                    onChange={onChangeSize("quantity", item, index)}
+                    className="add-shoe__input"
+                  />
+                  <Form.Control
+                    type="text"
+                    placeholder="Số lượng tồn"
+                    name="inStock"
+                    required
+                    value={item?.inStock}
+                    // disabled
+                    className="add-shoe__input"
+                    onChange={onChangeSize("inStock", item, index)}
+                  />
+
+                  {sizeState.length > 1 && (
+                    <div>
+                      <i
+                        className="fa-solid fa-trash"
+                        onClick={() => handleRemoveSize(index)}
+                      ></i>
+                    </div>
+                  )}
+                </Form.Group>
+                {sizeState.length - 1 === index && (
+                  <div className="icon-plus">
+                    <i className="fa-solid fa-plus" onClick={handleAddSize}></i>
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })}
 
           <Form.Group className="mb-3">
             <Form.Control
@@ -204,7 +256,7 @@ const AddShoeModal = () => {
               onChange={onChangeNewShoeForm}
             >
               <option>Chọn loại giày</option>
-              {categories?.map((el) => {
+              {categories?.results?.map((el) => {
                 return (
                   <React.Fragment key={el?._id}>
                     <option value={el?._id}>{el?.name}</option>

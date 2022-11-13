@@ -1,49 +1,53 @@
-import React, { useEffect,  useState } from "react";
-import { Link,  useSearchParams, createSearchParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { Link, useSearchParams, createSearchParams } from "react-router-dom";
 
 import { pathImg } from "../contexts/constants";
 import AppPagination from "./AppPagination";
 import axios from "axios";
 import { apiUrl } from "../contexts/constants";
 import CurrencyFormat from "react-currency-format";
+import { ShoeContext } from "../contexts/ShoeContext";
+import { CategoryContext } from "../contexts/CategoryContext";
 
 const Products = () => {
   //! State
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = searchParams?.get('page') || 1;
-  const search = searchParams?.get('search') || '';
+  const {
+    shoeState: { shoes },
+    setPrice,
+    getAllShoes,
+    setPage,
+    setSearch,
+  } = useContext(ShoeContext);
 
-  const [shoes, setShoes] = useState({});
-  const [count, setCount] = useState(1);
+  const {
+    categoryState: { categories },
+    getAllCategories,
+  } = useContext(CategoryContext);
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams?.get("page") || 1;
+  const search = searchParams?.get("search") || "";
+  const price = searchParams?.get("price") || "";
+
   const [query, setQuery] = useState(search);
+  const [sortPrice, setSortPrice] = useState(price);
 
   //! Function
   useEffect(() => {
-    (async () => {
-      const filters = {
-        page,
-        search
-      };
-  
-      try {
-        let request = null;
-     
-        if (filters.search) {
-          request = axios.get(`${apiUrl}/shoe/search?name=${filters.search}&page=${filters.page}&limit=9`);
-        } else {
-          request = axios.get(
-            `${apiUrl}/shoe?page=${filters?.page}&limit=9`
-          );
-        }
-        
-        const response = await request;
-        setShoes(response.data.shoes);
-        setCount(response.data.shoes.pageCount);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [page, search]);
+    console.log("__log")
+    console.log("page",page)
+    console.log("search",search)
+    // console.log("page",page)
+    
+    setPage(page);
+    setSearch(search);
+    setPrice(sortPrice);
+    getAllShoes(page,search,sortPrice)
+  }, [page, search, sortPrice]);
 
   const onPageChange = ({ selected }) => {
     let currentPage = selected + 1;
@@ -51,7 +55,24 @@ const Products = () => {
   };
 
   const onSubmitSearch = () => {
-    setSearchParams(createSearchParams({ search: query, page: 1 }))
+    setSearchParams(createSearchParams({ search: query, page: 1 }));
+  };
+
+  const onChangeSortPrice = (event) => {
+    console.log("__checked", event.target.checked);
+    console.log("__value", event.target.value);
+    if (sortPrice !== "" && sortPrice === event.target.value) {
+      setSortPrice("");
+      setSearchParams(createSearchParams({ price: "", page: 1, search }));
+    }
+    if (event.target.checked) {
+      setSortPrice(event.target.value);
+
+      setSearchParams(
+        createSearchParams({ price: event.target.value, page: 1, search })
+      );
+      console.log(sortPrice);
+    }
   };
 
   //! Render
@@ -64,18 +85,15 @@ const Products = () => {
               <h3 className="text-uppercase nav-menu__title">Danh mục</h3>
               <div className="nav-menu__title__name">Sản phẩm</div>
               <ul className="nav-menu__list">
-                <li className="nav-menu__list__items">
-                  <Link to="#">Oxford</Link>
-                </li>
-                <li className="nav-menu__list__items">
-                  <Link to="#">Loafer</Link>
-                </li>
-                <li className="nav-menu__list__items">
-                  <Link to="#">Derby</Link>
-                </li>
-                <li className="nav-menu__list__items">
-                  <Link to="#">Boots</Link>
-                </li>
+                {categories?.results?.map((el) => {
+                  return (
+                    <li className="nav-menu__list__items" key={el?._id}>
+                      <Link to={`/product/category/${el?._id}`}>
+                        {el?.name}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
               <div className="nav-menu__title__name">Chính sách</div>
               <ul className="nav-menu__list">
@@ -90,19 +108,51 @@ const Products = () => {
           </div>
           <div className="col-10">
             <div className="products">
-              <div className="products__with-search">
-                <input
-                  type="search"
-                  name="input-search"
-                  placeholder="Nhập sản phẩm bạn muốn tìm kiếm"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-                <i
-                  className="fa-solid fa-magnifying-glass products__with-search__icon"
-                  onClick={onSubmitSearch}
-                ></i>
+              <div className="products__filter">
+                <div className="products__filter__with-search">
+                  <input
+                    type="search"
+                    name="input-search"
+                    placeholder="Nhập sản phẩm bạn muốn tìm kiếm"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                  <i
+                    className="fa-solid fa-magnifying-glass products__filter__with-search__icon"
+                    onClick={onSubmitSearch}
+                  ></i>
+                </div>
+                <div className="products__filter__price">
+                  <span className="products__filter__price__heading">
+                    Mức giá
+                  </span>
+                  <div className="products__filter__price__check form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="lt"
+                      disabled={
+                        sortPrice !== "" && sortPrice !== "lt" ? true : false
+                      }
+                      onChange={onChangeSortPrice}
+                    />
+                    <label className="form-check-label">Dưới 2 triệu</label>
+                  </div>
+                  <div className="products__filter__price__check form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="gte"
+                      disabled={
+                        sortPrice !== "" && sortPrice !== "gte" ? true : false
+                      }
+                      onChange={onChangeSortPrice}
+                    />
+                    <label className="form-check-label">Từ 2 đến 4 triệu</label>
+                  </div>
+                </div>
               </div>
+
               <div className="products__list">
                 <div className="row">
                   {shoes.results &&
@@ -145,7 +195,7 @@ const Products = () => {
               </div>
               <div className="row">
                 <AppPagination
-                  pageCount={count}
+                  pageCount={shoes?.pageCount}
                   forcePage={page - 1}
                   onPageChange={onPageChange}
                 />

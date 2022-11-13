@@ -4,7 +4,7 @@ export const shoeReducer = (state, action) => {
     case "SHOES_LOADED_SUCCESS":
       return {
         ...state,
-        shoes: payload,
+        shoes:  payload,
       };
 
     case "PRODUCT_DETAILS_LOADED":
@@ -17,6 +17,19 @@ export const shoeReducer = (state, action) => {
       return {
         ...state,
         shoes: [...state.shoes, payload],
+      };
+
+    case "FIND_SHOE":
+      return { ...state, shoe: payload };
+
+    case "UPDATE_POST":
+      const newShoes = state.shoes.map((shoe) =>
+        shoe._id === payload._id ? payload : shoe
+      );
+
+      return {
+        ...state,
+        posts: newShoes,
       };
 
     default:

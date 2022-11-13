@@ -3,7 +3,7 @@
 .container {
   .product-details {
     margin: 30px 0 0;
-    padding: 0 0 50px 0;
+    padding: 0;
     font-family: "SVN-Gotham";
 
     .product-details__image {
@@ -26,6 +26,7 @@
       font-weight: 600;
       margin: 0 0 14px;
       color: #766a5e;
+      text-transform: uppercase;
     }
     .product-details__price {
       font-size: 30px;
@@ -111,6 +112,53 @@
         margin-right: 14px;
       }
     }
+    .product-details__wrapper-cmt {
+      margin: 60px 0 40px;
+      padding-left: 60px;
+      font-family: "SVN-Gotham";
+      font-size: 16px;
+      font-weight: 550;
+     
+      .form-floating {
+        width: 40%;
+        .product-details__wrapper-cmt__heading {
+          font-family: "SVN-Gotham";
+          font-size: 18px;
+          margin-bottom: 10px;
+        }
+        textarea {
+          padding: 8px 16px;
+          height: 80px;
+          margin-bottom: 10px;
+          border-color: #d0d0d0 ;
+          &:focus {
+            box-shadow: none;
+            outline: none;
+          }
+          
+        }
+       
+      }
+      .btn-cmt {
+        padding: 6px 14px;
+        background-color: #1c1c1c;
+        border: none;
+      }
+    }
+    .product-details__cmt__list {
+      padding-left: 60px;
+      margin-bottom: 8px;
+      font-family: "SVN-Gotham";
+      font-size: 18px;
+      font-weight: 500;
+      color: #1c1c1c;
+      .user-cmt {
+        font-size: 18px;
+        color: #0657a3;
+        font-weight: 550;
+      }
+    }
+   
   }
 }
 .active {

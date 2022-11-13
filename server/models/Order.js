@@ -12,6 +12,10 @@ const OrderSchema = new Schema(
       type: Date,
       default: Date.now(),
     },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
     address: {
       type: String,
       required: true,
@@ -31,18 +35,22 @@ const OrderSchema = new Schema(
 
     statusOrder: {
       type: String,
-      enum: ["Đang giao hàng", "Đã giao hàng"],
-      default: "Đang giao hàng",
+      enum: ["Delivering", "Completed", "Cancel"],
+      default: "Delivering",
     },
     payment: {
       type: String,
       required: true,
-      enum: ["cod", "online"],
+      enum: ["Cod", "Online"],
     },
     paymentStatus: {
       type: String,
-      enum: ["Đã thanh toán", "Chưa thanh toán"],
-      default: "Chưa thanh toán",
+      enum: ["Paid", "Unpaid"],
+      default: "Unpaid",
+    },
+    total : {
+      type: Number,
+      required: true
     },
     user: {
       type: Schema.Types.ObjectId,

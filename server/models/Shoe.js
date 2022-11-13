@@ -7,6 +7,10 @@ const ShoeSizeSchema = new Schema(
       type: Number,
       required: true,
     },
+    inStock: {
+      type: Number,
+      // default: 0,
+    },
     size: {
       type: Schema.Types.ObjectId,
       ref: "sizes",
@@ -41,14 +45,8 @@ const ShoeSchema = new Schema(
       required: true,
     },
 
-    sold: {
-      type: Number,
-      default: 0,
-    },
-    checked: {
-      type: Boolean,
-      default: false,
-    },
+   
+    
     category: {
       type: Schema.Types.ObjectId,
       ref: "categories",

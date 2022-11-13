@@ -1,0 +1,52 @@
+.categories-wrapper {
+    display: flex;
+    font-family: "Nunito", sans-serif;
+    .categories-container {
+      flex: 6;
+      .categories-page {
+        margin: 30px 20px;
+        .categories-page__with-search {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          .categories-page__with-search__search {
+            width: 26%;
+            input {
+              width: 80%;
+              padding: 6px 10px;
+              outline: none;
+              border-radius: 8px;
+              font-size: 16px;
+              margin-right: 12px;
+              color: #1c1c1c;
+            }
+            .categories-page__with-search__search__icon {
+              background-color: #6439ff;
+              color: white;
+              padding: 8px 18px;
+              cursor: pointer;
+              font-size: 16px;
+              border-radius: 6px;
+            }
+          }
+         
+          .categories-pages__with-search__create {
+            .categories-pages__with-search__create__btn {
+              margin-right: 10px;
+              background-color: #6439ff;
+            }
+            button {
+              font-size: 14px;
+              padding: 6px 12px;
+            }
+          }
+        }
+        .categories-page__list {
+          .categories-page__list__pagination {
+            margin: 40px 0;
+          }
+        }
+      }
+    }
+}

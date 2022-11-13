@@ -1,0 +1,15 @@
+.feedbacks-wrapper {
+  display: flex;
+  font-family: "Nunito", sans-serif;
+  .feedbacks-container {
+    flex: 6;
+    .feedbacks-page {
+      margin: 30px 20px;
+    }
+    .feedbacks-page__list {
+        .feedbacks-page__list__pagination {
+          margin: 40px 0;
+        }
+      }
+  }
+}

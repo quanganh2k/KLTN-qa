@@ -7,16 +7,42 @@ export const sizeReducer = (state, action) => {
         sizes: payload,
       };
 
-      //   case "PRODUCT_DETAILS_LOADED":
-      //     return {
-      //       ...state,
-      //       shoes: payload,
-      //     };
-
-      //   case "ADD_SHOE":
+    case "SIZES_ALL_LOADED_SUCCESS":
       return {
         ...state,
-        shoes: [...state.shoes, payload],
+        sizes: payload,
+      };
+
+    case "ADD_SIZE":
+      return {
+        ...state,
+        sizes: [...state.sizes, payload],
+      };
+
+    case "FIND_SIZE":
+      return { ...state, size: payload };
+
+    case "UPDATE_SIZE":
+      const newSizes = state.sizes.map((size) =>
+        size._id === payload._id ? payload : size
+      );
+
+      return {
+        ...state,
+        sizes: newSizes,
+      };
+
+    case "DELETE_SIZE":
+      return {
+        ...state,
+        sizes: state.sizes.filter(
+          (size) => size._id !== payload
+        ),
+      };
+
+      return {
+        ...state,
+        sizes: [...state.sizes, payload],
       };
 
     default:

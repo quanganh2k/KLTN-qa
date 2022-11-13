@@ -13,6 +13,8 @@ const categoryRouter = require("./routes/category");
 const sizeRouter = require("./routes/size");
 const shoeRouter = require("./routes/shoe");
 const checkoutRouter = require("./routes/checkout");
+const orderRouter = require("./routes/order");
+const feedbackRouter = require("./routes/feedback");
 
 const connectDB = async () => {
   try {
@@ -46,6 +48,10 @@ app.use("/api/category", categoryRouter);
 app.use("/api/size", sizeRouter);
 app.use("/api/shoe", shoeRouter);
 app.use("/api/checkout", checkoutRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/feedback", feedbackRouter);
+
+
 
 const PORT = 5000;
 

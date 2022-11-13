@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const SizeSchema = new Schema(
   {
     sizeNumber: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
     },

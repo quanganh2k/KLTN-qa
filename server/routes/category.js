@@ -5,6 +5,7 @@ const auth = require("../middleware/auth");
 const authAdmin = require("../middleware/authAdmin");
 
 const Category = require("../models/Category");
+const Shoe = require("../models/Shoe");
 
 const paginatedResults = require("../pagination/paginatedResults");
 
@@ -41,22 +42,55 @@ router.post("/", auth, authAdmin, async (req, res) => {
 // @route GET api/category
 // @desc Get ALl Categories
 // @access public
-router.get("/",  async (req, res) => {
+router.get("/", paginatedResults(Category), async (req, res) => {
   try {
-    const categories = await Category.find();
+    const categories = res.paginatedResults;
     res.json({ success: true, categories });
-    // res.json(res.paginatedResults)
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: error.message });
   }
 });
 
+// @route GET api/category/search
+// @desc Search by name
+// @access public
+router.get("/search", paginatedResults(Category), async (req, res) => {
+  try {
+    const filterCategory = res.paginatedResults;
+
+    res.json({ success: true, categories: filterCategory });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // @route DELETE api/category/:id
 // @desc Delete Category
 // @access only admin
+// router.delete("/:id", auth, authAdmin, async (req, res) => {
+//   try {
+//     const deletedCategory = await Category.findByIdAndDelete(req.params.id);
+
+//     res.json({
+//       success: true,
+//       message: "Bạn đã xoá thành công loại sản phẩm này",
+//       category: deletedCategory,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({ success: false, message: error.message });
+//   }
+// });
+
 router.delete("/:id", auth, authAdmin, async (req, res) => {
   try {
+    const shoeCategory = await Shoe.find({ category: req.params.id });
+    const listIdShoe = shoeCategory.map((el) => el._id);
+    await Shoe.deleteMany({
+      _id: {
+        $in: listIdShoe,
+      },
+    });
     const deletedCategory = await Category.findByIdAndDelete(req.params.id);
 
     res.json({

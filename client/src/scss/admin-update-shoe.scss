@@ -1,0 +1,67 @@
+
+.update-wrapper {
+    display: flex;
+  font-family: "Nunito", sans-serif;
+  .update-container {
+    flex: 6;
+    .update-shoe-page {
+        padding: 20px 30px;
+        .update-shoe-page__heading {
+            color: #6439ff;
+            margin-bottom: 30px;
+            font-size: 22px;
+        }
+        .update-shoe-page__form {
+            .update-shoe-page__form__update {
+                width: 33%;
+                img {
+                    width: 40%;
+                    margin-bottom: 10px;
+                }
+            }
+            .update-shoe-page__form__label {
+                color: #6439ff;
+                font-size: 16px;
+            }
+            .update-shoe-page__form__size {
+                display: flex;
+                // justify-content: space-between;
+                align-items: center;
+                
+                .size {
+                    width: 120px;
+                    height: 40px;
+                    margin-right: 34px;
+                    text-align: center;
+                }
+                .quantity {
+                    width: 120px;
+                    text-align: center;
+                    margin-right: 34px;
+                }
+                .inStock {
+                    width: 120px;
+                    text-align: center;
+            
+                }
+            }
+            .update-shoe-page__form__description {
+                width: 50%;
+                .update-shoe-page__form__description__input {
+                    min-height: 120px;
+                    padding: 10px;
+                }
+            }
+            .update-shoe-page__form__btn {
+                background-color: #6439ff;
+                color: #fff;
+                padding: 6px 20px;
+            }
+            
+        }
+    }
+  }
+}
+
+
+

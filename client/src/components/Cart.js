@@ -45,33 +45,33 @@ const Cart = () => {
                     <div className="col-8">
                       {cart.map((e) => {
                         return (
-                          <React.Fragment key={e._id}>
+                          <React.Fragment key={e?._id}>
                             <div className="cart-page__details__info">
                               <div className="cart-page__details__info__img">
                                 <img
-                                  src={`${pathImg}/${e.image}`}
+                                  src={`${pathImg}/${e?.image}`}
                                   alt="Ảnh sản phẩm"
                                 />
                               </div>
                               <div className="cart-page__details__info__product">
                                 <h3 className="cart-page__details__info__product__name">
-                                  {e.name}
+                                  {e?.name}
                                   <i
                                     className="fa-solid fa-trash icon-delete"
                                     onClick={() =>
-                                        handleRemove(e._id, e.sizeChoice)
+                                        handleRemove(e?._id, e?.sizeChoice)
                                     }
                                   ></i>
                                 </h3>
                                 <div className="cart-page__details__info__product__color">
-                                  Màu: {e.color}
+                                  Màu: {e?.color}
                                 </div>
                                 <div className="cart-page__details__info__product__size">
-                                  Size: <span>{e.sizeChoice}</span>
+                                  Size: <span>{e?.sizeChoice}</span>
                                 </div>
                                 <CurrencyFormat
                                   className="cart-page__details__info__product__price"
-                                  value={e.price}
+                                  value={e?.price}
                                   displayType={"text"}
                                   thousandSeparator={"."}
                                   decimalSeparator={","}
@@ -83,18 +83,18 @@ const Cart = () => {
                                   <span
                                     className="quantity__dec"
                                     onClick={() =>
-                                      decreaseQuantity(e._id, e.sizeChoice)
+                                      decreaseQuantity(e?._id, e?.sizeChoice)
                                     }
                                   >
                                     -
                                   </span>
                                   <span className="quantity__text">
-                                    {e.quantity}
+                                    {e?.quantity}
                                   </span>
                                   <span
                                     className="quantity__inc"
                                     onClick={() =>
-                                      increaseQuantity(e._id, e.sizeChoice)
+                                      increaseQuantity(e?._id, e?.sizeChoice)
                                     }
                                   >
                                     +

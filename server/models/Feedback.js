@@ -7,9 +7,9 @@ const FeedbackSchema = new Schema(
       type: String,
       required: true,
     },
-    customer: {
+    user: {
       type: Schema.Types.ObjectId,
-      ref: "customers",
+      ref: "users",
     },
     shoe: {
       type: Schema.Types.ObjectId,
