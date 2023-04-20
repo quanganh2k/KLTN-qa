@@ -14,7 +14,7 @@ const ShoeContextProvider = ({ children }) => {
     shoes: [],
     shoe: null,
   });
-  console.log("__shoeStae",shoeState)
+  console.log("__shoeStae", shoeState);
 
   const [showAddShoeModal, setShowAddShoeModal] = useState(false);
   const [showUpdateShoeModal, setShowUpdateShoeModal] = useState(false);
@@ -89,17 +89,10 @@ const ShoeContextProvider = ({ children }) => {
     } catch (error) {}
   };
 
-  // const findShoe = async (id) => {
-  //   const shoe = shoeState.shoes.results.find((item) => item._id === id);
-  //   dispatch({ type: "FIND_SHOE", payload: shoe });
-  // };
-  // // Chỉnh sửa sản phẩm
-  const updateShoe = async (id,infoUpdate) => {
+  // Chỉnh sửa sản phẩm
+  const updateShoe = async (id, infoUpdate) => {
     try {
-      const response = await axios.put(
-        `${apiUrl}/shoe/${id}`,
-        infoUpdate
-      );
+      const response = await axios.put(`${apiUrl}/shoe/${id}`, infoUpdate);
       if (response.data.success) {
         getAllShoes(page, search, price);
         return response.data;

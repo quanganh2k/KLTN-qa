@@ -88,7 +88,6 @@ const AddShoeModal = () => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log("hoatlala",newShoe,category);
     const formData = new FormData();
     console.log("__fileImg", fileImg);
     formData.append("name", name);

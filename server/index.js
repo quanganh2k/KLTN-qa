@@ -2,10 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const stripe = require("stripe")(
-  "sk_test_51LwM1GGRKsscBFNsDXIWT58NTpASDZs2bL4B4glfbOVOC1p7qGYKySuhMtADoofTeWkvDfPeSosZCdjsYJYER85n00WDhdBwZu"
-);
-const { v4: uuidv4 } = require('uuid');
 const bodyParser = require("body-parser");
 
 const authRouter = require("./routes/auth");
@@ -51,10 +47,6 @@ app.use("/api/checkout", checkoutRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/feedback", feedbackRouter);
 
-
-
 const PORT = 5000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
-
