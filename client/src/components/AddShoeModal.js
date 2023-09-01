@@ -138,7 +138,7 @@ const AddShoeModal = () => {
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              placeholder="Họ tên"
+              placeholder="Tên sản phẩm"
               name="name"
               required
               value={name}
